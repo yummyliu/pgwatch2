@@ -1,0 +1,24 @@
+FROM ubuntu:16.04
+
+RUN apt-get -q update && apt-get -qy install python3-pip && mkdir /pgwatch2
+
+###
+### add webpy source and configure installed components
+###
+
+RUN useradd -d /pgwatch2 pgwatch2 \
+    && chown -R pgwatch2 /pgwatch2
+
+ADD webpy /pgwatch2/webpy
+ADD pgwatch2/bootstrap /pgwatch2/bootstrap
+
+# Get Web UI requirements
+RUN pip3 install -r /pgwatch2/webpy/requirements.txt
+
+# Admin UI for configuring servers to be monitored
+EXPOSE 8080
+
+USER pgwatch2
+
+CMD ["/pgwatch2/bootstrap/launch_wrapper_webpy.sh", "--help"]
+ENTRYPOINT ["/pgwatch2/bootstrap/launch_wrapper_webpy.sh"]
