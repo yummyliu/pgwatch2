@@ -70,7 +70,8 @@ USER root
 
 # Get Web UI requirements and compile the Go gatherer
 ADD webpy /pgwatch2/webpy
-RUN pip3 install -r /pgwatch2/webpy/requirements.txt && cd /pgwatch2 && bash build_gatherer.sh
+RUN pip3 install -r /pgwatch2/webpy/requirements.txt && cd /pgwatch2 && bash build_gatherer.sh \
+    && apt autoremove -y && rm -rf /usr/local/go
 
 ADD grafana_dashboards /pgwatch2/grafana_dashboards
 
