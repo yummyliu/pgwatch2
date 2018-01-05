@@ -10,8 +10,8 @@ echo pgwatch2:x:$(id -u):$(id -g):pgwatch2:/home/postgres/:/bin/bash >> /etc/pas
 /usr/lib/postgresql/9.5/bin/initdb -D /var/lib/postgresql/9.5/main/ --locale en_US.UTF-8 -E UTF8 -U postgres
 
 if [ ! -f /pgwatch2/ssl_key.pem -o ! -f /pgwatch2/ssl_cert.pem ] ; then
-    openssl req -x509 -newkey rsa:4096 -keyout /pgwatch2/ssl_key.pem -out /pgwatch2/ssl_cert.pem -days 3650 -nodes -sha256 -subj '/CN=pw2'
-    chmod 0600 /pgwatch2/*.pem
+    openssl req -x509 -newkey rsa:4096 -keyout /pgwatch2/self-signed-ssl.key -out /pgwatch2/self-signed-ssl.pem -days 3650 -nodes -sha256 -subj '/CN=pw2'
+    chmod 0600 /pgwatch2/self-signed-ssl.*
 fi
 
 if [ -n "$PW2_GRAFANASSL"] ; then
