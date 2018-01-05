@@ -4,15 +4,25 @@ Flexible self-contained PostgreSQL metrics monitoring/dashboarding solution
 
 # Installing
 
-Software is packaged as Docker so getting started should be easy
+Software is packaged as Docker (for custom setup see the last paragraph below) so getting started should be easy
 ```
 # fetch and run the latest Docker image, exposing Grafana on port 3000 and administrative web UI on 8080
 docker run -d -p 3000:3000 -p 8080:8080 --name pw2 cybertec/pgwatch2
 ```
 After some minutes you could open the ["db-overview"](http://127.0.0.1:3000/dashboard/db/db-overview) dashboard and start
 looking at metrics. For defining your own dashboards you need to log in as admin (admin/pgwatch2admin).
-NB! If you don't want to add the "test" database (the pgwatch2 configuration db) for monitoring set the NOTESTDB=1 env parameter when launching the image. For production setups also "--restart unless-stopped" (or custom startup scripts) is highly recommended.
+NB! If you don't want to add the "test" database (the pgwatch2 configuration db) for monitoring set the NOTESTDB=1 env
+parameter when launching the image.
 
+For production setups without a container management framework also "--restart unless-stopped"
+(or custom startup scripts) is highly recommended. Also usage of volumes is then recommended to enable
+easier updating to newer pgwatch2 Docker images without going through the backup/restore procedure described towards the
+end of README.
+
+```
+for v in pg influx grafana ; do docker volume create $v ; done
+docker run --name pw2 -v pg:/var/lib/postgresql -v influx:/var/lib/influxdb -v grafana:/var/lib/grafana -p 8080:8080 -p 3000:3000 cybertec/pgwatch2
+```
 
 For more advanced usecases or for easier problemsolving you can decide to expose all services
 ```
