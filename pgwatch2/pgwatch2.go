@@ -83,7 +83,7 @@ var db_pg_version_map = make(map[string]DBVersionMapEntry)
 var db_pg_version_map_lock = sync.RWMutex{}
 var InfluxDefaultRetentionPolicyDuration int64 = 90 // 90 days of monitoring data will be kept around. can be adjusted later on influx side if needed
 var monitored_db_cache map[string]map[string]interface{}
-var monitored_db_cache_lock sync.RWMutex
+var monitored_db_cache_lock = sync.RWMutex{}
 var metric_fetching_channels = make(map[string](chan MetricFetchMessage)) // [db1unique]=chan
 var metric_fetching_channels_lock = sync.RWMutex{}
 var influx_host_count = 1
