@@ -70,10 +70,12 @@ const GRAPHITE_METRICS_PREFIX string = "pgwatch2"
 const PERSIST_QUEUE_MAX_SIZE = 100000 // storage queue max elements. when reaching the limit, older metrics will be dropped.
 // actual requirements depend a lot of metric type and nr. of obects in schemas,
 // but 100k should be enough for 24h, assuming 5 hosts monitored with "exhaustive" preset config. this would also require ~2 GB RAM per one Influx host
+const DATASTORE_TIMESCALA= "timescala"
 const DATASTORE_INFLUX = "influx"
 const DATASTORE_GRAPHITE = "graphite"
 
 var configDb *sqlx.DB
+var timescalaDb *sqlx.DB
 var graphiteConnection *graphite.Graphite
 var log = logging.MustGetLogger("main")
 var metric_def_map map[string]map[decimal.Decimal]string
@@ -194,6 +196,34 @@ func GetAllActiveHostsFromConfigDB() ([](map[string]interface{}), error) {
 		UpdateMonitoredDBCache(data) // cache used by workers
 	}
 	return data, err
+}
+
+func insertTimescalaPoints(epoch_time time.Time, measurement, dbuniquename string, pointdata map[string]interface{}) error {
+	for k, v := range pointdata {
+		log.Infof("%s:%s,%s,%s",measurement,dbuniquename,k,v)
+	}
+	// TODO write one record into timescala
+	return nil
+}
+
+
+func SendToTimescaladb(timescalaDb *sqlx.DB, conn_id, dbuniquename, measurement string, data [](map[string]interface{})) error {
+	if data == nil || len(data) == 0 {
+		return nil
+	}
+	log.Debug("SendToTimescaladb", conn_id, dbuniquename, "data[0] of ", len(data), ":", data[0])
+
+	rows_batched := 0
+	for _, dr := range data {
+		rows_batched ++;
+		// construct some insert data from data map
+		t1 := time.Now()
+		insertTimescalaPoints(t1, measurement, dbuniquename, dr)
+		t_diff := time.Now().Sub(t1)
+		log.Infof("wrote %d/%d rows to Timescaladb for [%s:%s] in %dus", rows_batched, len(data),	dbuniquename, measurement, t_diff.Nanoseconds()/1000)
+	}
+
+	return nil
 }
 
 func SendToInflux(connect_str, conn_id, dbname, measurement string, data [](map[string]interface{})) error {
@@ -466,7 +496,9 @@ func MetricsPersister(data_store string, storage_ch <-chan MetricStoreMessage) {
 					}
 					retry_queue.PushFront(msg)
 				} else {
-					if data_store == DATASTORE_INFLUX {
+					if data_store == DATASTORE_TIMESCALA {
+						err = SendToTimescaladb(timescalaDb, strconv.Itoa(i), msg.DBUniqueName, msg.MetricName, msg.Data)
+					} else if data_store == DATASTORE_INFLUX {
 						err = SendToInflux(InfluxConnectStrings[i], strconv.Itoa(i), msg.DBUniqueName, msg.MetricName, msg.Data)
 					} else if data_store == DATASTORE_GRAPHITE {
 						err = SendToGraphite(msg.DBUniqueName, msg.MetricName, msg.Data)
@@ -1204,7 +1236,7 @@ type Options struct {
 	Dbname              string `short:"d" long:"dbname" description:"PG config DB dbname" default:"pgwatch2" env:"PW2_PGDATABASE"`
 	User                string `short:"u" long:"user" description:"PG config DB host" default:"pgwatch2" env:"PW2_PGUSER"`
 	Password            string `long:"password" description:"PG config DB password" env:"PW2_PGPASSWORD"`
-	Datastore           string `long:"datastore" description:"[influx|graphite]" default:"influx" env:"PW2_DATASTORE"`
+	Datastore           string `long:"datastore" description:"[influx|graphite|timescala]" default:"timescala" env:"PW2_DATASTORE"`
 	InfluxHost          string `long:"ihost" description:"Influx host" default:"localhost" env:"PW2_IHOST"`
 	InfluxPort          string `long:"iport" description:"Influx port" default:"8086" env:"PW2_IPORT"`
 	InfluxDbname        string `long:"idbname" description:"Influx DB name" default:"pgwatch2" env:"PW2_IDATABASE"`
@@ -1220,6 +1252,11 @@ type Options struct {
 	InfluxRetentionDays int64  `long:"iretentiondays" description:"Retention period in days [90 default]" env:"PW2_IRETENTIONDAYS"`
 	GraphiteHost        string `long:"graphite-host" description:"Graphite host" env:"PW2_GRAPHITEHOST"`
 	GraphitePort        string `long:"graphite-port" description:"Graphite port" env:"PW2_GRAPHITEPORT"`
+	TimescaladbHost		string `long:"thost" description:"Timescaladb host" default:"localhost" env:"PW2_THOST"`
+	TimescaladbPort		string `long:"tport" description:"Timescaladb port" default:"5432" env:"PW2_TPORT"`
+	TimescaladbDbname	string `long:"tdbname" description:"Timescaladb dbname" default:"timescala" env:"PW2_TDBNAME"`
+	TimescaladbUser		string `long:"tuser" description:"Timescaladb user" default:"pgwatch2" env:"PW2_THOST"`
+	TimescaladbPassword string `long:"tpassword" description:"Timescaladb password" default:"pgwatch2" env:"PW2_TPASSWORD"`
 	//File           string `short:"f" long:"file" description:"Sqlite3 config DB file"`
 }
 
@@ -1265,6 +1302,30 @@ func main() {
 		InitGraphiteConnection(opts.GraphiteHost, int(graphite_port))
 		log.Info("starting GraphitePersister...")
 		go MetricsPersister(DATASTORE_GRAPHITE, persist_ch)
+	} else if opts.Datastore == "timescala" {
+		log.Infof("Timescaladb connectinfo: host=%s port=%s dbname=%s user=%s password=%s",
+		opts.TimescaladbHost, opts.TimescaladbPort, opts.TimescaladbDbname, opts.TimescaladbUser, opts.TimescaladbPassword)
+		// check connection and store connection
+		var err error
+		timescalaDb,err = GetPostgresDBConnection(opts.TimescaladbHost,
+			opts.TimescaladbPort,
+			opts.TimescaladbDbname,
+			opts.TimescaladbUser,
+			opts.TimescaladbPassword,
+			"disable")
+		if err != nil {
+			log.Fatal("could not open timescala connection! exit.")
+		}
+
+		err = timescalaDb.Ping()
+
+		if err != nil {
+			log.Fatal("could not ping timescaladb! exit.", err)
+		} else {
+			log.Info("connect to timescaladb OK!")
+		}
+
+		go MetricsPersister(DATASTORE_TIMESCALA, persist_ch)
 	} else {
 		retentionPeriod := InfluxDefaultRetentionPolicyDuration
 		if opts.InfluxRetentionDays > 0 {
