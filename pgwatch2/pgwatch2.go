@@ -226,8 +226,8 @@ func insertTimescalaPoints(epoch_time time.Time, measurement, dbuniquename strin
 		_, err = timescalaDb.NamedExec(`INSERT INTO db_stats (time, dbname, blk_read_time, blk_write_time, blks_hit,blks_read,conflicts,deadlocks,numbackends,size_b,temp_bytes,temp_files,tup_deleted,tup_fetched,tup_inserted,tup_returned,tup_updated,xact_commit,xact_rollback)
 		VALUES (:time,:dbname,:blk_read_time,:blk_write_time,:blks_hit,:blks_read,:conflicts,:deadlocks,:numbackends,:size_b,:temp_bytes,:temp_files,:tup_deleted,:tup_fetched,:tup_inserted,:tup_returned,:tup_updated,:xact_commit,:xact_rollback)`, pointdata)
 	case "index_stats":
-		_, err = timescalaDb.NamedExec(`INSERT INTO index_stats (time,dbname,blk_read_time,blk_write_time,blks_hit,blks_read,conflicts,deadlocks,numbackends,size_b,temp_bytes,temp_files,tup_deleted,tup_fetched,tup_inserted,tup_returned,tup_updated,xact_commit,xact_rollback)
-		VALUES (:time,:dbname,:blk_read_time,:blk_write_time,:blks_hit,:blks_read,:conflicts,:deadlocks,:numbackends,:size_b,:temp_bytes,:temp_files,:tup_deleted,:tup_fetched,:tup_inserted,:tup_returned,:tup_updated,:xact_commit,:xact_rollback)`, pointdata)
+		_, err = timescalaDb.NamedExec(`INSERT INTO index_stats ( time,dbname,idx_scan,idx_tup_fetch,idx_tup_read,index_size_b)
+		VALUES (:time,:dbname,:idx_scan,:idx_tup_fetch,:idx_tup_read,:index_size_b)`, pointdata)
 	case "locks":
 		_, err = timescalaDb.NamedExec(`INSERT INTO locks (time,dbname,count)
 		VALUES (:time,:dbname,:count)`, pointdata)
