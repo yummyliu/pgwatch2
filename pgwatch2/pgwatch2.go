@@ -266,7 +266,7 @@ func insertTimescalaPoints(epoch_time time.Time, measurement, dbuniquename strin
 	}
 
 	if err != nil {
-		log.Error(err)
+		log.Errorf("%s, %s",err,measurement)
 	}
 	return err
 }
