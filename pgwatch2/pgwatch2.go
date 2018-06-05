@@ -201,7 +201,14 @@ func GetAllActiveHostsFromConfigDB() ([](map[string]interface{}), error) {
 func insertTimescalaPoints(epoch_time time.Time, measurement, dbuniquename string, pointdata map[string]interface{}) error {
 	// write one record into timescala
 	pointdata["dbname"] = dbuniquename
-	pointdata["time"] = time.Unix(0,pointdata["epoch_ns"].(int64))
+	if pointdata["epoch_ns"] == nil {
+		log.Warning("No timestamp_ns found, server time will be used. measurement:", measurement)
+		pointdata["time"] = time.Now()
+	} else {
+		pointdata["time"] = time.Unix(0,pointdata["epoch_ns"].(int64))
+	}
+
+
 
 	// TODO complete all measurements
 	var err error
