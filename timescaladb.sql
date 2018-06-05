@@ -179,3 +179,15 @@ create table wal (
     dbname                  text,
     xlog_location_b integer
 );
+
+alter table wal alter COLUMN xlog_location_b type bigint ;
+alter table stat_statements alter COLUMN shared_blks_hit type bigint;
+alter table index_stats alter COLUMN idx_tup_read type bigint;
+alter table db_stats alter COLUMN tup_deleted type bigint ;
+alter table db_stats alter COLUMN blks_hit type bigint ;
+alter table pgbouncer_stats alter COLUMN total_xact_time type bigint ;
+alter table table_io_stats alter COLUMN heap_blks_hit type bigint;
+alter table db_stats alter COLUMN tup_fetched type bigint;
+alter table db_stats alter COLUMN tup_returned type bigint;
+alter table pgbouncer_stats alter COLUMN total_query_time type bigint ;
+alter table table_io_stats alter COLUMN idx_blks_hit type bigint;

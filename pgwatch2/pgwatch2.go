@@ -202,7 +202,7 @@ func insertTimescalaPoints(epoch_time time.Time, measurement, dbuniquename strin
 	// write one record into timescala
 	pointdata["dbname"] = dbuniquename
 	if pointdata["epoch_ns"] == nil {
-		log.Warning("No timestamp_ns found, server time will be used. measurement:", measurement)
+		log.Info("No timestamp_ns found, server time will be used. measurement:", measurement)
 		pointdata["time"] = time.Now()
 	} else {
 		pointdata["time"] = time.Unix(0,pointdata["epoch_ns"].(int64))
@@ -262,7 +262,7 @@ func insertTimescalaPoints(epoch_time time.Time, measurement, dbuniquename strin
 		_, err = timescalaDb.NamedExec(`INSERT INTO wal (time,dbname,xlog_location_b)
 		VALUES (:time,:dbname,:xlog_location_b)`, pointdata)
 	default:
-		log.Warning("wrong measurement")
+		log.Error("wrong measurement")
 	}
 
 	if err != nil {
