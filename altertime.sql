@@ -1,0 +1,16 @@
+alter table backends alter COLUMN "time" type timestamp with time zone;
+alter table bgwriter alter COLUMN "time" type timestamp with time zone;
+alter table cpu_load alter COLUMN "time" type timestamp with time zone;
+alter table db_stats alter COLUMN "time" type timestamp with time zone;
+alter table index_stats alter COLUMN "time" type timestamp with time zone;
+alter table locks alter COLUMN "time" type timestamp with time zone;
+alter table locks_mode alter COLUMN "time" type timestamp with time zone;
+alter table pgbouncer_stats alter COLUMN "time" type timestamp with time zone;
+alter table replication alter COLUMN "time" type timestamp with time zone;
+alter table sproc_stats alter COLUMN "time" type timestamp with time zone;
+alter table stat_statements alter COLUMN "time" type timestamp with time zone;
+alter table stat_statements_calls alter COLUMN "time" type timestamp with time zone;
+alter table table_bloat_approx_summary alter COLUMN "time" type timestamp with time zone;
+alter table table_io_stats alter COLUMN "time" type timestamp with time zone;
+alter table table_stats alter COLUMN "time" type timestamp with time zone;
+alter table wal alter COLUMN "time" type timestamp with time zone;

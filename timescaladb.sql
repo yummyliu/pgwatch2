@@ -1,5 +1,5 @@
 create table backends (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     active                  integer,
     background_workers      integer,
@@ -13,7 +13,7 @@ create table backends (
 );
 
 create table bgwriter (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     buffers_alloc         integer,
     buffers_backend       integer,
@@ -28,7 +28,7 @@ create table bgwriter (
 );
 
 create table cpu_load (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     load_15min float,
     load_1min  float,
@@ -37,7 +37,7 @@ create table cpu_load (
 
 
 create table db_stats (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     blk_read_time  float,
     blk_write_time float,
@@ -59,7 +59,7 @@ create table db_stats (
 );
 
 create table index_stats (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     idx_scan      integer,
     idx_tup_fetch integer,
@@ -68,19 +68,19 @@ create table index_stats (
 );
 
 create table locks (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     count    integer
 );
 
 create table locks_mode (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     count    integer
 );
 
 create table pgbouncer_stats (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     avg_query_count   integer,
     avg_query_time    integer,
@@ -99,13 +99,13 @@ create table pgbouncer_stats (
 );
 
 create table replication (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     lag_b    integer
 );
 
 create table sproc_stats (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     self_time  float,
     sp_calls   integer,
@@ -113,7 +113,7 @@ create table sproc_stats (
 );
 
 create table stat_statements (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     blk_read_time       float,
     blk_write_time      float,
@@ -127,20 +127,20 @@ create table stat_statements (
 );
 
 create table stat_statements_calls (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     calls    float
 );
 
 create table table_bloat_approx_summary (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     approx_free_percent float,
     approx_free_space_b float
 );
 
 create table table_io_stats (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     heap_blks_hit   integer,
     heap_blks_read  integer,
@@ -153,7 +153,7 @@ create table table_io_stats (
 );
 
 create table table_stats (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     analyze_count              integer,
     autoanalyze_count          integer,
@@ -175,7 +175,7 @@ create table table_stats (
 );
 
 create table wal (
-    time                    timestamp,
+    time                    timestamp with time zone,
     dbname                  text,
     xlog_location_b integer
 );
