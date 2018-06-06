@@ -212,9 +212,9 @@ func insertTimescalaPoints(epoch_time time.Time, measurement, dbuniquename strin
 		if strings.HasPrefix(k, "tag_") {
 				tag := k[4:]
 				pointdata[tag] = fmt.Sprintf("%s", v)
+				log.Debugf("%s : %s : %s",k,tag,v)
 		}
 	}
-
 
 	// TODO complete all measurements
 	var err error
@@ -232,26 +232,26 @@ func insertTimescalaPoints(epoch_time time.Time, measurement, dbuniquename strin
 		_, err = timescalaDb.NamedExec(`INSERT INTO db_stats (time, dbname, blk_read_time, blk_write_time, blks_hit,blks_read,conflicts,deadlocks,numbackends,size_b,temp_bytes,temp_files,tup_deleted,tup_fetched,tup_inserted,tup_returned,tup_updated,xact_commit,xact_rollback)
 		VALUES (:time,:dbname,:blk_read_time,:blk_write_time,:blks_hit,:blks_read,:conflicts,:deadlocks,:numbackends,:size_b,:temp_bytes,:temp_files,:tup_deleted,:tup_fetched,:tup_inserted,:tup_returned,:tup_updated,:xact_commit,:xact_rollback)`, pointdata)
 	case "index_stats":
-		_, err = timescalaDb.NamedExec(`INSERT INTO index_stats ( time,dbname,idx_scan,idx_tup_fetch,idx_tup_read,index_size_b)
-		VALUES (:time,:dbname,:idx_scan,:idx_tup_fetch,:idx_tup_read,:index_size_b)`, pointdata)
+		_, err = timescalaDb.NamedExec(`INSERT INTO index_stats ( time,dbname,index_name,schema,table_full_name,table_name,idx_scan,idx_tup_fetch,idx_tup_read,index_size_b)
+		VALUES (:time,:dbname,:index_name,:schema,:table_full_name,:table_name,:idx_scan,:idx_tup_fetch,:idx_tup_read,:index_size_b)`, pointdata)
 	case "locks":
-		_, err = timescalaDb.NamedExec(`INSERT INTO locks (time,dbname,count)
-		VALUES (:time,:dbname,:count)`, pointdata)
+		_, err = timescalaDb.NamedExec(`INSERT INTO locks (time,locktype,dbname,count)
+		VALUES (:time,:locktype,:dbname,:count)`, pointdata)
 	case "locks_mode":
-		_, err = timescalaDb.NamedExec(`INSERT INTO locks_mode (time,dbname,count)
-		VALUES (:time,:dbname,:count)`, pointdata)
+		_, err = timescalaDb.NamedExec(`INSERT INTO locks_mode (time,dbname,lockmode,count)
+		VALUES (:time,:dbname,:lockmode,:count)`, pointdata)
 	case "pgbouncer_stats":
 		_, err = timescalaDb.NamedExec(`INSERT INTO pgbouncer_stats (time,dbname,avg_query_count,avg_query_time,avg_recv,avg_sent,avg_wait_time,avg_xact_count,avg_xact_time,total_query_count,total_query_time,total_received,total_sent,total_wait_time,total_xact_count,total_xact_time)
 		VALUES (:time,:dbname,:avg_query_count,:avg_query_time,:avg_recv,:avg_sent,:avg_wait_time,:avg_xact_count,:avg_xact_time,:total_query_count,:total_query_time,:total_received,:total_sent,:total_wait_time,:total_xact_count,:total_xact_time)`, pointdata)
 	case "replication":
-		_, err = timescalaDb.NamedExec(`INSERT INTO replication (time,dbname,lag_b)
-		VALUES (:time,:dbname,:lag_b)`, pointdata)
+		_, err = timescalaDb.NamedExec(`INSERT INTO replication (time,dbname,application_name,lag_b)
+		VALUES (:time,:dbname,:application_name,:lag_b)`, pointdata)
 	case "sproc_stats":
-		_, err = timescalaDb.NamedExec(`INSERT INTO sproc_stats (time,dbname,self_time,sp_calls,total_time)
-		VALUES (:time,:dbname,:self_time,:sp_calls,:total_time)`, pointdata)
+		_, err = timescalaDb.NamedExec(`INSERT INTO sproc_stats (time,dbname,function_full_name,function_name,oid,schema,self_time,sp_calls,total_time)
+		VALUES (:time,:dbname,:function_full_name,:function_name,:oid,:schema,:self_time,:sp_calls,:total_time)`, pointdata)
 	case "stat_statements":
-		_, err = timescalaDb.NamedExec(`INSERT INTO stat_statements (time,dbname,blk_read_time,blk_write_time,calls,shared_blks_hit,shared_blks_read,shared_blks_written,temp_blks_read,temp_blks_written,total_time)
-		VALUES (:time,:dbname,:blk_read_time,:blk_write_time,:calls,:shared_blks_hit,:shared_blks_read,:shared_blks_written,:temp_blks_read,:temp_blks_written,:total_time)`, pointdata)
+		_, err = timescalaDb.NamedExec(`INSERT INTO stat_statements (time,dbname,query,queryid,blk_read_time,blk_write_time,calls,shared_blks_hit,shared_blks_read,shared_blks_written,temp_blks_read,temp_blks_written,total_time)
+		VALUES (:time,:dbname,:query,:queryid,:blk_read_time,:blk_write_time,:calls,:shared_blks_hit,:shared_blks_read,:shared_blks_written,:temp_blks_read,:temp_blks_written,:total_time)`, pointdata)
 	case "stat_statements_calls":
 		_, err = timescalaDb.NamedExec(`INSERT INTO stat_statements_calls ( time,dbname,calls)
 		VALUES (:time,:dbname,:calls)`, pointdata)
@@ -259,11 +259,11 @@ func insertTimescalaPoints(epoch_time time.Time, measurement, dbuniquename strin
 		_, err = timescalaDb.NamedExec(`INSERT INTO table_bloat_approx_summary (time,dbname,approx_free_percent,approx_free_space_b)
 		VALUES (:time,:dbname,:approx_free_percent,:approx_free_space_b)`, pointdata)
 	case "table_io_stats":
-		_, err = timescalaDb.NamedExec(`INSERT INTO table_io_stats (time,dbname,heap_blks_hit,heap_blks_read,idx_blks_hit,idx_blks_read,tidx_blks_hit,tidx_blks_read,toast_blks_hit,toast_blks_read)
-		VALUES (:time,:dbname,:heap_blks_hit,:heap_blks_read,:idx_blks_hit,:idx_blks_read,:tidx_blks_hit,:tidx_blks_read,:toast_blks_hit,:toast_blks_read)`, pointdata)
+		_, err = timescalaDb.NamedExec(`INSERT INTO table_io_stats (time,dbname,schema,table_full_name,table_name,heap_blks_hit,heap_blks_read,idx_blks_hit,idx_blks_read,tidx_blks_hit,tidx_blks_read,toast_blks_hit,toast_blks_read)
+		VALUES (:time,:dbname,:schema,:table_full_name,:table_name,:heap_blks_hit,:heap_blks_read,:idx_blks_hit,:idx_blks_read,:tidx_blks_hit,:tidx_blks_read,:toast_blks_hit,:toast_blks_read)`, pointdata)
 	case "table_stats":
-		_, err = timescalaDb.NamedExec(`INSERT INTO table_stats (time,dbname,analyze_count,autoanalyze_count,autovacuum_count,idx_scan,idx_tup_fetch,n_tup_del,n_tup_hot_upd,n_tup_ins,n_tup_upd,seconds_since_last_analyze,seconds_since_last_vacuum,seq_scan,seq_tup_read,table_size_b,toast_size_b,total_relation_size_b,vacuum_count)
-		VALUES (:time,:dbname,:analyze_count,:autoanalyze_count,:autovacuum_count,:idx_scan,:idx_tup_fetch,:n_tup_del,:n_tup_hot_upd,:n_tup_ins,:n_tup_upd,:seconds_since_last_analyze,:seconds_since_last_vacuum,:seq_scan,:seq_tup_read,:table_size_b,:toast_size_b,:total_relation_size_b,:vacuum_count)`, pointdata)
+		_, err = timescalaDb.NamedExec(`INSERT INTO table_stats (time,dbname,schema,table_full_name,table_name,analyze_count,autoanalyze_count,autovacuum_count,idx_scan,idx_tup_fetch,n_tup_del,n_tup_hot_upd,n_tup_ins,n_tup_upd,seconds_since_last_analyze,seconds_since_last_vacuum,seq_scan,seq_tup_read,table_size_b,toast_size_b,total_relation_size_b,vacuum_count)
+		VALUES (:time,:dbname,:schema,:table_full_name,:table_name,:analyze_count,:autoanalyze_count,:autovacuum_count,:idx_scan,:idx_tup_fetch,:n_tup_del,:n_tup_hot_upd,:n_tup_ins,:n_tup_upd,:seconds_since_last_analyze,:seconds_since_last_vacuum,:seq_scan,:seq_tup_read,:table_size_b,:toast_size_b,:total_relation_size_b,:vacuum_count)`, pointdata)
 	case "wal":
 		_, err = timescalaDb.NamedExec(`INSERT INTO wal (time,dbname,xlog_location_b)
 		VALUES (:time,:dbname,:xlog_location_b)`, pointdata)
