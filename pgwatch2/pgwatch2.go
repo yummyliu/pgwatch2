@@ -208,6 +208,12 @@ func insertTimescalaPoints(epoch_time time.Time, measurement, dbuniquename strin
 		pointdata["time"] = time.Unix(0,pointdata["epoch_ns"].(int64))
 	}
 
+	for k, v := range pointdata {
+		if strings.HasPrefix(k, "tag_") {
+				tag := k[4:]
+				pointdata[tag] = fmt.Sprintf("%s", v)
+		}
+	}
 
 
 	// TODO complete all measurements
