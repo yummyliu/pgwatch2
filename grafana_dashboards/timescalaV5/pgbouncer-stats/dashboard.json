@@ -2,7 +2,7 @@
   "annotations": {
     "list": [
       {
-        "$$hashKey": "object:1754",
+        "$$hashKey": "object:3740",
         "builtIn": 1,
         "datasource": "-- Grafana --",
         "enable": true,
@@ -16,24 +16,21 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1521045747240,
+  "id": 23,
+  "iteration": 1528367813352,
   "links": [],
   "panels": [
     {
       "cacheTimeout": null,
       "colorBackground": false,
-      "colorValue": true,
+      "colorValue": false,
       "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "#614d93",
-        "rgba(50, 172, 45, 0.97)"
+        "#d44a3a",
+        "#1f78c1",
+        "#299c46"
       ],
-      "datasource": null,
-      "description": "Current \"Transaction Per Second\" based on total_xact_count",
-      "editable": true,
-      "error": false,
-      "format": "none",
+      "datasource": "timescala",
+      "format": "short",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -42,14 +39,12 @@
         "thresholdMarkers": true
       },
       "gridPos": {
-        "h": 3,
-        "w": 4,
+        "h": 6,
+        "w": 8,
         "x": 0,
         "y": 0
       },
-      "height": "100",
-      "hideTimeOverride": true,
-      "id": 1,
+      "id": 8,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -79,19 +74,19 @@
       ],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
+        "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": false
+        "show": true
       },
       "tableColumn": "",
       "targets": [
         {
-          "alias": "TPS",
-          "dsType": "influxdb",
+          "alias": "",
+          "format": "time_series",
           "groupBy": [
             {
               "params": [
-                "1s"
+                "$__interval"
               ],
               "type": "time"
             },
@@ -102,275 +97,10 @@
               "type": "fill"
             }
           ],
-          "measurement": "pgbouncer_stats",
+          "hide": false,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "",
-          "rawQuery": false,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "total_xact_count"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              },
-              {
-                "params": [
-                  "1s"
-                ],
-                "type": "non_negative_derivative"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "dbname",
-              "operator": "=~",
-              "value": "/^$dbname$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": "",
-      "timeFrom": "1h",
-      "title": "TPS",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "#629e51",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": null,
-      "description": "Current \"Queries Per Second\" based on total_query_count",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 4,
-        "y": 0
-      },
-      "height": "100",
-      "hideTimeOverride": true,
-      "id": 2,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "alias": "QPS",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "1s"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "pgbouncer_stats",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "",
-          "rawQuery": false,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "total_query_count"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              },
-              {
-                "params": [
-                  "1s"
-                ],
-                "type": "non_negative_derivative"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "dbname",
-              "operator": "=~",
-              "value": "/^$dbname$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": "",
-      "timeFrom": "1h",
-      "title": "QPS",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": null,
-      "decimals": 1,
-      "description": "Current value based on derivative of total_query_time /  total_query_count",
-      "editable": true,
-      "error": false,
-      "format": "µs",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 8,
-        "y": 0
-      },
-      "height": "100",
-      "hideTimeOverride": true,
-      "id": 3,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": " ",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "alias": "avg_query_runtime",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT non_negative_derivative(last(\"total_query_time\"), 1h) / non_negative_derivative(last(\"total_query_count\"), 1h) FROM \"pgbouncer_stats\" WHERE \"dbname\" =~ /^$dbname$/ AND $timeFilter GROUP BY time(1s) fill(none)",
-          "rawQuery": true,
+          "rawSql": "SELECT\n  time,\n  avg_query_count\nFROM\n  pgbouncer_stats\nwhere\n  dbname = '$dbname'\nand\n  $__timeFilter(time)\n",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -391,11 +121,9 @@
         }
       ],
       "thresholds": "",
-      "timeFrom": "1h",
-      "timeShift": null,
-      "title": "Avg. query runtime",
+      "title": "QPS",
       "type": "singlestat",
-      "valueFontSize": "80%",
+      "valueFontSize": "100%",
       "valueMaps": [
         {
           "op": "=",
@@ -408,17 +136,13 @@
     {
       "cacheTimeout": null,
       "colorBackground": false,
-      "colorValue": true,
+      "colorValue": false,
       "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "#890f02",
-        "rgba(50, 172, 45, 0.97)"
+        "#299c46",
+        "#508642",
+        "#d44a3a"
       ],
-      "datasource": null,
-      "decimals": null,
-      "description": "Current avg. wait time to get a connection, per query",
-      "editable": true,
-      "error": false,
+      "datasource": "timescala",
       "format": "µs",
       "gauge": {
         "maxValue": 100,
@@ -428,279 +152,11 @@
         "thresholdMarkers": true
       },
       "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 12,
+        "h": 6,
+        "w": 8,
+        "x": 8,
         "y": 0
       },
-      "height": "100",
-      "hideTimeOverride": true,
-      "id": 4,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": " ",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "alias": "db_size_change_last_hour",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "pgbouncer_stats",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT non_negative_derivative(last(\"total_wait_time\")) / non_negative_derivative(last(\"total_query_count\")) FROM \"pgbouncer_stats\" WHERE \"dbname\" =~ /^$dbname$/ AND $timeFilter GROUP BY time(1s) fill(none)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "total_wait_time"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              },
-              {
-                "params": [
-                  "1m"
-                ],
-                "type": "non_negative_derivative"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "dbname",
-              "operator": "=~",
-              "value": "/^$dbname$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": "",
-      "timeFrom": "1h",
-      "timeShift": null,
-      "title": "Pool wait time",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "#052b51",
-        "#64b0c8",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": null,
-      "decimals": 1,
-      "description": "Current Incoming traffic based on total_received",
-      "editable": true,
-      "error": false,
-      "format": "Bps",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 16,
-        "y": 0
-      },
-      "height": "100",
-      "hideTimeOverride": true,
-      "id": 5,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": " ",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "alias": "bytes_received",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "1s"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "pgbouncer_stats",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "total_received"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              },
-              {
-                "params": [
-                  "1s"
-                ],
-                "type": "non_negative_derivative"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "dbname",
-              "operator": "=~",
-              "value": "/^$dbname$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": "",
-      "timeFrom": "5m",
-      "timeShift": null,
-      "title": "Incoming traffic",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "#e24d42",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": null,
-      "decimals": 1,
-      "description": "Based on total_sent",
-      "editable": true,
-      "error": false,
-      "format": "Bps",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 20,
-        "y": 0
-      },
-      "height": "100",
-      "hideTimeOverride": true,
       "id": 6,
       "interval": null,
       "links": [],
@@ -718,7 +174,7 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "postfix": " ",
+      "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "50%",
@@ -731,276 +187,19 @@
       ],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
+        "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": false
+        "show": true
       },
       "tableColumn": "",
       "targets": [
         {
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "1s"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "pgbouncer_stats",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "total_sent"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              },
-              {
-                "params": [
-                  "1s"
-                ],
-                "type": "non_negative_derivative"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "dbname",
-              "operator": "=~",
-              "value": "/^$dbname$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": "",
-      "timeFrom": "1h",
-      "timeShift": null,
-      "title": "Outgoing traffic",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
-      "aliasColors": {
-        "TPS": "#584477"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "Based on total_query_count",
-      "editable": true,
-      "error": false,
-      "fill": 1,
-      "grid": {},
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 3
-      },
-      "id": 7,
-      "legend": {
-        "alignAsTable": false,
-        "avg": true,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "connected",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "db_stats.mean",
-          "yaxis": 2
-        },
-        {
-          "alias": "DB size",
-          "yaxis": 2
-        },
-        {
-          "alias": "blk_read_time",
-          "yaxis": 2
-        },
-        {
-          "alias": "blk_write_time",
-          "yaxis": 2
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "TPS",
-          "dsType": "influxdb",
+          "alias": "",
+          "format": "time_series",
           "groupBy": [
             {
               "params": [
                 "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "pgbouncer_stats",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "total_xact_count"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              },
-              {
-                "params": [
-                  "1s"
-                ],
-                "type": "non_negative_derivative"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "dbname",
-              "operator": "=~",
-              "value": "/^$dbname$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "TPS",
-      "tooltip": {
-        "msResolution": false,
-        "shared": true,
-        "sort": 0,
-        "value_type": "cumulative"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "ms",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ]
-    },
-    {
-      "aliasColors": {
-        "Pool wait time": "#890f02",
-        "TX rollback ratio": "#890F02"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "decimals": 1,
-      "editable": true,
-      "error": false,
-      "fill": 1,
-      "grid": {},
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 3
-      },
-      "id": 8,
-      "legend": {
-        "alignAsTable": false,
-        "avg": true,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "connected",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Pool wait time",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
               ],
               "type": "time"
             },
@@ -1012,18 +211,16 @@
             }
           ],
           "hide": false,
-          "measurement": "db_stats",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT non_negative_derivative(last(\"total_wait_time\")) / non_negative_derivative(last(\"total_query_count\")) FROM \"pgbouncer_stats\" WHERE \"dbname\" =~ /^$dbname$/ AND $timeFilter GROUP BY time($__interval) fill(none)",
-          "rawQuery": true,
+          "rawSql": "SELECT\n  $__time(time),\n  avg_query_time\nFROM\n  pgbouncer_stats\nWHERE\n  dbname = '$dbname'\nand\n  $__timeFilter(time)\n",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "blks_hit"
+                  "value"
                 ],
                 "type": "field"
               },
@@ -1036,359 +233,82 @@
           "tags": []
         }
       ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Pool wait time per Query",
-      "tooltip": {
-        "msResolution": false,
-        "shared": true,
-        "sort": 0,
-        "value_type": "cumulative"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
+      "thresholds": "",
+      "title": "avg_query_time",
+      "type": "singlestat",
+      "valueFontSize": "100%",
+      "valueMaps": [
         {
-          "format": "µs",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
         }
-      ]
+      ],
+      "valueName": "avg"
     },
     {
-      "aliasColors": {
-        "#Backends": "#F9E2D2",
-        "Deadlocks (1h rate)": "#BF1B00",
-        "QPS": "#508642"
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "timescala",
+      "format": "µs",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
       },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "editable": true,
-      "error": false,
-      "fill": 1,
-      "grid": {},
       "gridPos": {
         "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 9
+        "w": 8,
+        "x": 16,
+        "y": 0
       },
-      "id": 9,
-      "legend": {
-        "avg": true,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
+      "id": 4,
+      "interval": null,
       "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
       "nullPointMode": "connected",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
         {
-          "alias": "Deadlocks (1h rate)",
-          "yaxis": 1
-        },
-        {
-          "alias": "Temp bytes written",
-          "yaxis": 2
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
         }
       ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
       "targets": [
         {
-          "alias": "QPS",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "pgbouncer_stats",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "total_query_count"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              },
-              {
-                "params": [
-                  "1s"
-                ],
-                "type": "non_negative_derivative"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "QPS",
-      "tooltip": {
-        "msResolution": false,
-        "shared": true,
-        "sort": 0,
-        "value_type": "cumulative"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "Bps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ]
-    },
-    {
-      "aliasColors": {
-        "DB Size": "#2F575E",
-        "Incoming byterate": "#65c5db",
-        "Incoming rate": "#6ed0e0",
-        "WAL rate": "#0A50A1"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "decimals": null,
-      "editable": true,
-      "error": false,
-      "fill": 1,
-      "grid": {},
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 9
-      },
-      "height": "",
-      "id": 10,
-      "legend": {
-        "alignAsTable": false,
-        "avg": true,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "connected",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "WAL rate (bytes/h)",
-          "yaxis": 2
-        },
-        {
-          "alias": "DB Size",
-          "yaxis": 2
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Incoming rate",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "pgbouncer_stats",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "total_received"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              },
-              {
-                "params": [
-                  "1s"
-                ],
-                "type": "non_negative_derivative"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Incoming traffic rate",
-      "tooltip": {
-        "msResolution": false,
-        "shared": true,
-        "sort": 0,
-        "value_type": "cumulative"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "Bps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "bytes",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ]
-    },
-    {
-      "aliasColors": {
-        "Avg. runtime": "#ef843c"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "decimals": 1,
-      "description": "",
-      "fill": 1,
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 15
-      },
-      "id": 11,
-      "interval": ">60s",
-      "legend": {
-        "avg": true,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Avg. runtime",
-          "dsType": "influxdb",
+          "alias": "",
+          "format": "time_series",
           "groupBy": [
             {
               "params": [
@@ -1403,10 +323,102 @@
               "type": "fill"
             }
           ],
+          "hide": false,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT non_negative_derivative(last(\"total_query_time\"), 1h) / non_negative_derivative(last(\"total_query_count\"), 1h) FROM \"pgbouncer_stats\" WHERE \"dbname\" =~ /^$dbname$/ AND $timeFilter GROUP BY time($__interval) fill(none)",
+          "rawSql": "SELECT\n  $__time(time),\n  avg_wait_time\nFROM\n  pgbouncer_stats\nWHERE\n  dbname = '$dbname'\nand\n  $__timeFilter(time)",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": "",
+      "title": "avg_wait_time",
+      "transparent": false,
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "timescala",
+      "fill": 1,
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 2,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "",
+          "format": "time_series",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"value\") FROM \"measurement\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
           "rawQuery": true,
+          "rawSql": "SELECT\n  $__time(time),\n  avg_query_time\nFROM\n  pgbouncer_stats\nWHERE\ndbname = '$dbname'and\n  $__timeFilter(time)\n  \n",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1429,12 +441,13 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Avg. query runtime",
+      "title": "pgb_avg_query_time",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -1449,7 +462,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": null,
           "show": true
         },
         {
@@ -1458,59 +471,49 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": false
+          "show": true
         }
       ]
     },
     {
-      "aliasColors": {
-        "Outgoing byterate": "#e24d42",
-        "Outgoing rate": "#e24d42",
-        "load_5": "#BA43A9"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
-      "description": "",
+      "datasource": "timescala",
       "fill": 1,
       "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 15
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 16
       },
-      "id": 12,
+      "id": 10,
       "legend": {
-        "avg": true,
+        "avg": false,
         "current": false,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
-      "linewidth": 2,
+      "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "avg_query_runtime",
-          "yaxis": 2
-        }
-      ],
+      "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "alias": "Outgoing rate",
-          "dsType": "influxdb",
+          "alias": "",
+          "format": "time_series",
           "groupBy": [
             {
               "params": [
@@ -1520,33 +523,27 @@
             },
             {
               "params": [
-                "none"
+                "null"
               ],
               "type": "fill"
             }
           ],
-          "measurement": "pgbouncer_stats",
           "orderByTime": "ASC",
           "policy": "default",
+          "rawSql": "SELECT\n  time,\n  avg_query_count\nFROM\n  pgbouncer_stats\nwhere\n  dbname = '$dbname'\nand\n  $__timeFilter(time)",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "total_sent"
+                  "value"
                 ],
                 "type": "field"
               },
               {
                 "params": [],
                 "type": "mean"
-              },
-              {
-                "params": [
-                  "1s"
-                ],
-                "type": "non_negative_derivative"
               }
             ]
           ],
@@ -1556,12 +553,13 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Outgoing traffic rate",
+      "title": "QPS",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "individual"
       },
+      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -1572,41 +570,25 @@
       },
       "yaxes": [
         {
-          "format": "Bps",
+          "format": "short",
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": null,
           "show": true
         },
         {
-          "format": "ms",
-          "label": "",
+          "format": "short",
+          "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": false
+          "show": true
         }
       ]
-    },
-    {
-      "content": "Brought to you by: <a href=\"https://www.cybertec-postgresql.com/en/\"><img src=\"https://www.cybertec-postgresql.com/wp-content/uploads/2017/11/Cybertec_Logo_2017_300px_slogan_trans.png\" alt=\"Cybertec – The PostgreSQL Database Company\"></a>",
-      "editable": true,
-      "error": false,
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 0,
-        "y": 21
-      },
-      "id": 14,
-      "links": [],
-      "mode": "html",
-      "title": "",
-      "transparent": true,
-      "type": "text"
     }
   ],
+  "refresh": false,
   "schemaVersion": 16,
   "style": "dark",
   "tags": [],
@@ -1615,30 +597,42 @@
       {
         "allValue": null,
         "current": {
-          "text": "test",
-          "value": "test"
+          "tags": [],
+          "text": "pgb-core-master",
+          "value": "pgb-core-master"
         },
-        "datasource": null,
+        "datasource": "timescala",
         "hide": 0,
         "includeAll": false,
         "label": null,
         "multi": false,
         "name": "dbname",
-        "options": [],
-        "query": "SHOW TAG VALUES WITH KEY = \"dbname\" ",
-        "refresh": 1,
+        "options": [
+          {
+            "selected": false,
+            "text": "pgb-moderationmedia-master",
+            "value": "pgb-moderationmedia-master"
+          },
+          {
+            "selected": true,
+            "text": "pgb-core-master",
+            "value": "pgb-core-master"
+          }
+        ],
+        "query": "select distinct dbname from pgbouncer_stats ;",
+        "refresh": 0,
         "regex": "",
         "sort": 0,
-        "tagValuesQuery": null,
+        "tagValuesQuery": "",
         "tags": [],
-        "tagsQuery": null,
+        "tagsQuery": "",
         "type": "query",
         "useTags": false
       }
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {
@@ -1666,8 +660,8 @@
       "30d"
     ]
   },
-  "timezone": "browser",
-  "title": "PgBouncer stats",
-  "uid": null,
-  "version": 1
+  "timezone": "",
+  "title": "pgbouncer",
+  "uid": "42gUCcSik",
+  "version": 8
 }

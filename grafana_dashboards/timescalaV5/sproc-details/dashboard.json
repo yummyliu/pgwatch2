@@ -2,6 +2,7 @@
   "annotations": {
     "list": [
       {
+        "$$hashKey": "object:3427",
         "builtIn": 1,
         "datasource": "-- Grafana --",
         "enable": true,
@@ -15,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1521045971830,
+  "id": 25,
+  "iteration": 1528367723929,
   "links": [],
   "panels": [
     {
@@ -24,26 +25,26 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "timescala",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 9,
         "w": 24,
         "x": 0,
         "y": 0
       },
-      "id": 1,
+      "id": 4,
       "legend": {
-        "avg": true,
+        "avg": false,
         "current": false,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -56,66 +57,49 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "calls",
-          "dsType": "influxdb",
+          "alias": "",
+          "format": "time_series",
           "groupBy": [
             {
               "params": [
-                "30s"
+                "$__interval"
               ],
               "type": "time"
             },
             {
               "params": [
-                "none"
+                "null"
               ],
               "type": "fill"
             }
           ],
-          "measurement": "sproc_stats",
+          "hide": false,
           "orderByTime": "ASC",
           "policy": "default",
+          "rawSql": "WITH m_calls AS\n  (SELECT time_bucket('1 minutes', time) AS interval,\n          avg(sp_calls) AS call_avg\n   FROM sproc_stats\n   WHERE dbname = '$dbname'\n     AND function_full_name = '$function'\n   GROUP BY interval\n   ORDER BY interval\n)\n\nSELECT interval as time , call_avg - lag(call_avg) over ( ORDER BY interval) as call_change\nFROM m_calls \nWHERE $__timeFilter(interval);",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "sp_calls"
+                  "value"
                 ],
                 "type": "field"
               },
               {
                 "params": [],
                 "type": "mean"
-              },
-              {
-                "params": [
-                  "1h"
-                ],
-                "type": "non_negative_derivative"
               }
             ]
           ],
-          "tags": [
-            {
-              "key": "dbname",
-              "operator": "=~",
-              "value": "/^$dbname$/"
-            },
-            {
-              "condition": "AND",
-              "key": "function_full_name",
-              "operator": "=~",
-              "value": "/^$sproc_name$/"
-            }
-          ]
+          "tags": []
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Calls (1h rate)",
+      "title": "call_change_count",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -135,7 +119,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": null,
           "show": true
         },
         {
@@ -153,24 +137,23 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
-      "decimals": 1,
+      "datasource": "timescala",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 11,
         "w": 24,
         "x": 0,
-        "y": 7
+        "y": 9
       },
       "id": 2,
       "legend": {
-        "avg": true,
+        "avg": false,
         "current": false,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
@@ -186,128 +169,49 @@
       "steppedLine": false,
       "targets": [
         {
-          "$$hashKey": "object:233",
-          "alias": "total_time",
-          "dsType": "influxdb",
+          "alias": "",
+          "format": "time_series",
           "groupBy": [
             {
               "params": [
-                "auto"
+                "$__interval"
               ],
               "type": "time"
             },
             {
               "params": [
-                "none"
+                "null"
               ],
               "type": "fill"
             }
           ],
-          "measurement": "sproc_stats",
+          "hide": false,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT non_negative_derivative(mean(\"total_time\"), 1h)  /  non_negative_derivative(mean(\"sp_calls\"), 1h)  FROM \"sproc_stats\" WHERE \"dbname\" =~ /^$dbname$/ AND \"function_full_name\" =~ /^$sproc_name$/ AND $timeFilter GROUP BY time(30s) fill(none)",
-          "rawQuery": true,
+          "rawSql": " WITH m_calls AS\n  (SELECT time_bucket('1 minutes', time) AS interval,\n          last(total_time,time) AS total_run_time,\n          last(sp_calls,time) as total_sp_calls\n   FROM sproc_stats\n   WHERE dbname = '$dbname'\n     AND function_full_name = '$function'\n   GROUP BY interval\n   ORDER BY interval desc\n)\n\nSELECT \n  interval as time,\n  case when \n    (total_sp_calls - lag(total_sp_calls) over ( ORDER BY interval)) = 0 then 0\n  ELSE  \n    (1000*(total_run_time - lag(total_run_time) over ())) / (total_sp_calls - lag(total_sp_calls) over ()) \n  end as avg_run_time\nFROM m_calls \nWHERE $__timeFilter(interval);",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "total_time"
+                  "value"
                 ],
                 "type": "field"
               },
               {
                 "params": [],
                 "type": "mean"
-              },
-              {
-                "params": [
-                  "1h"
-                ],
-                "type": "non_negative_derivative"
               }
             ]
           ],
-          "tags": [
-            {
-              "key": "dbname",
-              "operator": "=~",
-              "value": "/^$dbname$/"
-            },
-            {
-              "condition": "AND",
-              "key": "function_full_name",
-              "operator": "=~",
-              "value": "/^$sproc_name$/"
-            }
-          ]
-        },
-        {
-          "$$hashKey": "object:234",
-          "alias": "self_time",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "30s"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "sproc_stats",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT non_negative_derivative(mean(\"self_time\"), 1h)  /  non_negative_derivative(mean(\"sp_calls\"), 1h)  FROM \"sproc_stats\" WHERE \"dbname\" =~ /^$dbname$/ AND \"function_full_name\" =~ /^$sproc_name$/ AND $timeFilter GROUP BY time(30s) fill(none)",
-          "rawQuery": true,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "total_time"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              },
-              {
-                "params": [
-                  "1h"
-                ],
-                "type": "non_negative_derivative"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "dbname",
-              "operator": "=~",
-              "value": "/^$dbname$/"
-            },
-            {
-              "condition": "AND",
-              "key": "function_full_name",
-              "operator": "=~",
-              "value": "/^$sproc_name$/"
-            }
-          ]
+          "tags": []
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Avg. runtime",
+      "title": "runtime_avg_min",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -323,7 +227,7 @@
       },
       "yaxes": [
         {
-          "format": "ms",
+          "format": "µs",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -349,17 +253,17 @@
       {
         "allValue": null,
         "current": {
-          "text": "test",
-          "value": "test"
+          "text": "core-master",
+          "value": "core-master"
         },
-        "datasource": "Influx",
+        "datasource": "timescala",
         "hide": 0,
         "includeAll": false,
         "label": null,
         "multi": false,
         "name": "dbname",
         "options": [],
-        "query": "SHOW TAG VALUES FROM \"sproc_stats\" WITH KEY = \"dbname\"",
+        "query": "select distinct dbname from sproc_stats ;",
         "refresh": 1,
         "regex": "",
         "sort": 0,
@@ -371,15 +275,18 @@
       },
       {
         "allValue": null,
-        "current": null,
-        "datasource": "Influx",
+        "current": {
+          "text": "yay.update_user",
+          "value": "yay.update_user"
+        },
+        "datasource": "timescala",
         "hide": 0,
         "includeAll": false,
         "label": null,
         "multi": false,
-        "name": "sproc_name",
+        "name": "function",
         "options": [],
-        "query": "SHOW TAG VALUES FROM sproc_stats WITH KEY = \"function_full_name\" WHERE dbname = '$dbname'",
+        "query": "select distinct function_full_name from sproc_stats where dbname = '$dbname' ;",
         "refresh": 1,
         "regex": "",
         "sort": 0,
@@ -420,8 +327,8 @@
       "30d"
     ]
   },
-  "timezone": "browser",
-  "title": "Sproc details",
-  "uid": null,
-  "version": 0
+  "timezone": "",
+  "title": "Function_stats",
+  "uid": "fxQmGoIiz",
+  "version": 5
 }
