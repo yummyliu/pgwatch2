@@ -1,0 +1,16 @@
+backends
+bgwriter
+cpu_load
+db_stats
+index_stats
+locks
+locks_mode
+pgbouncer_stats
+replication
+sproc_stats
+stat_statements
+stat_statements_calls
+table_bloat_approx_summary
+table_io_stats
+table_stats
+wal
